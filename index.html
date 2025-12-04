@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cardápio - Bem me Cake</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff5f7;
+      color: #333;
+    }
+    header {
+      background: #ff4da6;
+      color: white;
+      padding: 15px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+    nav ul li {
+      margin-right: 50px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .menu-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .container {
+      margin-top: 100px;
+      padding: 20px;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h2 {
+      color: #ff4da6;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h3.category-title {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #ff3385;
+      border-bottom: 2px solid #ff4da6;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    .card {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      gap: 15px;
+    }
+    .card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .card-content {
+      flex: 1;
+      display: flex;
+      gap: 16px;
+      flex-direction: column;
+    }
+    .card-content h4 {
+      margin: 0;
+      color: #ff4da6;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-content p {
+      margin: 2px 0;
+      font-size: 14px;
+    }
+    .category-nav {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .category-nav a {
+      display: inline-block;
+      margin: 5px 10px;
+      padding: 8px 15px;
+      background: #ff4da6;
+      color: white;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .category-nav a:hover {
+      background: #e60073;
+    }
+    footer {
+  background: #ff4da6;
+  color: white;
+  padding: 30px 20px;
+  margin-top: 40px;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between; /* Deixa lado a lado */
+  align-items: flex-start;
+  flex-wrap: wrap; /* Empilha no celular */
+  max-width: 1000px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.footer-container h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  border-bottom: 2px solid white;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.footer-contato a,
+.footer-redes a,
+.footer-endereco a {
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.footer-redes a i {
+  font-size: 20px;
+  margin-right: 10px;
+  transition: color 0.3s ease;
+}
+
+.footer-contato i,
+.footer-redes i,
+.footer-endereco i {
+  margin-right: 10px;
+}
+
+.footer-redes a:hover i {
+  color: #ffe6f0;
+}
+
+.footer-copy {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  border-top: 1px solid rgba(255,255,255,0.3);
+  padding-top: 10px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 25px;
+  }
+}
+
+.footer-container div {
+    width: 100%;            /* Cada bloco ocupa toda a largura */
+    max-width: 300px;       /* Limita a largura para não ficar esticado demais */
+  }
+
+  .footer-contato a,
+  .footer-redes a,
+  .footer-endereco a {
+    display: inline-block;
+    word-wrap: break-word;  /* Quebra links longos */
+  }
+  
+    /* Responsividade */
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        background: #ff4da6;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+      }
+      nav ul.active {
+        display: flex;
+      }
+      nav ul li {
+        margin: 15px 0;
+        text-align: center;
+      }
+      .menu-toggle {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+        position: absolute;
+        right: 50px;
+        top: 15px;
+      }
+      .card {
+        flex-direction: column;
+        text-align: center;
+        height: 480px;
+      }
+      .card img {
+        width: 100%;
+        height: 380px;;
+      }
+      .card-content h4 {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+    body {
+      background-image: url(imgs/WhatsApp\ Image\ 2025-10-01\ at\ 23.03.11.jpeg);
+    }
+    .btn {
+      display: inline-block;
+      max-width: fit-content;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #fff;
+      background-color: #ff4da6; /* azul padrão */
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #ff4da6; /* azul mais escuro no hover */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display: flex; justify-content: left; gap: 5px;">
+      <h1>Bem Me Cake</h1>
+      <img src="imgs/Logo_BemMeCake.png" style="height: 30px;" alt="">
+    </div>
+    <span class="menu-toggle">☰</span>
+    <nav>
+      <ul class="texto-destaque">
+        <li><a href="#cardapio">Cardápio</a></li>
+        <li><a href="valores.html">Valores</a></li>
+        <li><a href="#sobre">Contato</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container" id="cardapio">
+    <h2>Categorias</h2>
+
+    <div class="category-nav">
+      <a href="#caseiros">Bolos Caseiros</a>
+      <a href="#bolos_de_festa">Bolos de Festa</a>
+      <a href="#doces">Doces</a>
+      <a href="#bolo_de_pote">Bolo de Pote</a>
+      <a href="#novidades">Novidades</a>
+      <a href="#bebidas">Bebidas</a>
+    </div>
+
+      <h3 class="category-title" id="caseiros">Bolos Caseiros</h3>
+    <div class="card">
+      <img src="imgs/Bolo_Cenoura.jpg" alt="Cacau">
+      <div class="card-content">
+        <h4>1. BOLO DE CENOURA <span></span></h4>
+        <p>Ingredientes: Açúcar, Cenoura, Farinha, Fermento, Óleo e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/WhatsApp Image 2025-10-01 at 20.29.23.jpeg" alt="">
+      <div class="card-content">
+        <h4>2. BOLO DE LARANJA <span></span></h4>
+        <p>Ingredientes: Açúcar, Casca de laranja, Farinha, Fermento, Óleo, Ovos e Suco de laranja.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_Limão2.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>3. BOLO DE LIMÃO <span></span></h4>
+        <p>Ingredientes: Açúcar, Farinha, Fermento, Gelatina de limão, Leite, Óleo e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_Milho.jpeg" alt="Dori">
+      <div class="card-content">
+        <h4>4. BOLO DE MILHO<span></span></h4>
+        <p>Ingredientes: Açúcar, Farinha, Fermento, Flocos de milho, Iogurte, Milho em lata, Óleo e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/bolo-de-mandioca-com-coco.jpeg" alt="Dori">
+      <div class="card-content">
+        <h4>5. BOLO DE MANDIOCA <span></span></h4>
+        <p>Ingredientes: Açúcar, Coco ralado, Fermento, Leite, Leite de coco, Margarina, Massa de mandioca e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/WhatsApp Image 2025-10-01 at 20.29.25.jpeg" alt="Dori">
+      <div class="card-content">
+        <h4>6. BOLO DE CHOCOLATE <span></span></h4>
+        <p>Ingredientes: Açúcar, Água, Chocolate em pó, Farinha, Fermento, Leite, Óleo e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_Pamonha.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>7. BOLO DE PAMONHA <span></span></h4>
+        <p>Ingredientes: Coco ralado, Espiga de milho, Fermento, Leite condensado, Leite de coco, Leite, Óleo, Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_BananaAveia.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>8. BANANA COM AVEIA <span></span></h4>
+        <p>Ingredientes: Açúcar, Aveia fina, Bananas, Canela, Fermento, Óleo e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_BananaCaramelizado.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>9. BANANA CARAMELIZADA<span></span></h4>
+        <p>Ingredientes: Açúcar, Canela, Fermento, Farinha, Leite, Óleo, Ovos</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_Ninho.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>10. NINHO <span></span></h4>
+        <p>Ingredientes: Açúcar, Farinha, Fermento, Leite, Leite em pó, Margarina, Óleo, Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_Coco.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>11. COCO <span></span></h4>
+        <p>Ingredientes: Açúcar, Coco ralado, Essência de coco, Farinha, Fermento, Leite, Óleo, Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_Fubá.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>12. BOLO DE FUBÁ<span></span></h4>
+        <p>Ingredientes: Açúcar, Farinha, Fermento, Fubá, Goiabada, Leite, Óleo e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_Churros.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>13. CHURROS <span></span></h4>
+        <p>Ingredientes: Açúcar, Canela, Farinha, Fermento, Leite, Óleo e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_CenouraVegano.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>14. CENOURA VEGANO <span></span></h4>
+        <p>Ingredientes: Açúcar demerara, Cenoura, Farinha de trigo, Fermento, Leite vegetal, Óleo de coco, Óleo.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_ChocoGlútenLactose.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>15. CHOCOLATE SEM GLUTEM E SEM LACTOSE <span></span></h4>
+        <p>Ingredientes: Açúcar, Água quente, Cacau em pó, Farinha de arroz, Fermento, Óleo, Ovos, Polvilho doce, Sal.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_CenGlútenLactose.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>16. CENOURA SEM LACTOSE E SEM GULTEM <span></span></h4>
+        <p>Ingredientes: Açúcar, Cenoura, Farinha de arroz, Fermento, Óleo, Sal.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/WhatsApp Image 2025-10-01 at 17.04.37.jpeg" alt="Dori">
+      <div class="card-content">
+        <h4>17. BOLO RED VELVET <span></span></h4>
+        <p>Ingredientes: Açúcar, Baunilha, Chocolate em pó, Corante vermelho, Farinha, Leite, Óleo, Ovos, Vinagre branco.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_Formigueiro.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>18. FORMIGUEIRO <span></span></h4>
+        <p>Ingredientes: Açúcar, Baunilha, Farinha, Fermento, Granulado, Leite, Óleo, Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_ChocolateVegano.jpg" alt="Dori">
+      <div class="card-content">
+        <h4>19. CHOCOLATE VEGANO <span></span></h4>
+        <p>Ingredientes: Açúcar demerara, Bicarbonato de sódio, Cacau em pó, Essência de baunilha, Farinha de trigo, Fermento, Leite vegetal, Óleo de coco, Vinagre de maçã.</p>
+      </div>
+    </div>
+
+    <h3 class="category-title" id="bolos_de_festa">Bolos de Festa (Massa)</h3>
+    <div class="card">
+      <img src="imgs/Bolo_PãoDeLó.jpg" alt="Dominó">
+      <div class="card-content">
+        <h4>20. PÃO DE LÓ (MASSA BRANCA) <span></span></h4>
+        <p>Ingredientes: Açúcar, Água quente, Baunilha, Farinha, Fermento e Ovos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bolo_MassaChocolate.jpg" alt="Holandesa">
+      <div class="card-content">
+        <h4>21. MASSA DE CHOCOLATE <span></span></h4>
+        <p>Ingredientes: Açúcar, Água, Chocolate em pó, Farinha, Fermento, Leite, Óleo e Ovos.</p>
+      </div>
+    </div>
+
+    <h3 class="category-title" id="doces">Doces</h3>
+    <div class="card">
+      <img src="imgs/Brigadeiro.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>22. BRIGADEIRO <span></span></h4>
+        <p>Ingredientes: Chocolate em pó, Creme de leite, Glucose de milho, Granulado e Leite condensado.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Doce_Ninho.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>23. NINHO <span></span></h4>
+        <p>Ingredientes: Creme de leite, Glucose de milho, Leite condensado e Leite em pó.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Beijinho.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>24. BEIJINHO <span></span></h4>
+        <p>Ingredientes: Creme de leite, Glucose de milho, Leite condensado e Côco ralado.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Surpresa_de_Uva.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>24. SURPRESA DE UVA <span></span></h4>
+        <p>Ingredientes: Creme de leite, Leite condensado, Leite em pó e Uva.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Picho_de_Pé.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>25. BICHO DE PÉ <span></span></h4>
+        <p>Ingredientes: Leite condensado, Açúcar, Gelatina de morango e Manteiga.</p>
+      </div>
+    </div>
+
+    <h3 class="category-title" id="recheios">Recheios</h3>
+    <div class="card">
+      <img src="imgs/Recheio_MousseMaracujá.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>26. MOUSSE DE MARACUJÁ <span></span></h4>
+        <p>Ingredientes: Chantilly, Polpa de maracujá, Suco em pó de maracujá e Leite condensado</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Recheio_Sensação.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>27. SENSAÇÃO <span></span></h4>
+        <p>Ingredientes: Chantilly, Suco em pó de morango, Leite condensado e Barra de chocolate em pedaços.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Recheio_Brigadeiro.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>28. BRIGADEIRO <span></span></h4>
+        <p>Ingredientes: Leite condensado, Creme de leite e Chocolate em pó.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Recheio_MousseNinho.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>29. MOUSSE DE NINHO <span></span></h4>
+        <p>Ingredientes: Chantilly e Brigadeiro de ninho.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Recheio_MousseDoceDeLeite.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>30. MOUSSE DE DOCE DE LEITE <span></span></h4>
+        <p>Ingredientes: Chantilly e Doce de leite caseiro.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Recheio_Ninho.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>31. NINHO <span></span></h4>
+        <p>Ingredientes: Leite condensado, Creme de leite e Leite em pó.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Recheio_MousseDeChocolate.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>32. MOUSSE DE CHOCOLATE <span></span></h4>
+        <p>Ingredientes: Doce de leite, Chantilly e Chocolate em pó.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Recheio_MousseMorango.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>33. MOUSSE DE MORANGO <span></span></h4>
+        <p>Ingredientes: Chantilly, Suco em pó de morango e Bandeija de morango.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Recheio_Prestígio.jpg" alt="Valiosa">
+      <div class="card-content">
+        <h4>34. PRESTÍGIO <span></span></h4>
+        <p>Ingredientes: Leite condensado, Creme de leite e Côco ralado.</p>
+      </div>
+    </div>
+
+    <h3 class="category-title" id="bolo_de_pote">Bolos de Pote</h3>
+    <div class="card">
+      <img src="imgs/Pote_PãoDeLó.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>35. PÃO DE LÓ (MASSA BRANCA)</h4>
+        <p>Ingredientes: Farinha, Açúcar, Água quente, Ovos, Baunilha e Fermento.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Pote_MassaChocolate.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>36.  MASSA DE CHOCOLATE></h4>
+        <p>Ingredientes: Farinha, Açúcar, Água, Ovos, Fermento, Leite, Óleo e Chocolate em pó.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Pote_RedVelvet.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>37.  BOLO RED VELVET</h4>
+        <p>Ingredientes: Farinha, Açúcar, Leite, Ovos, Vinagre branco, Baunilha, Chocolate em pó, Corante vermelho e Óleo.</p>
+      </div>
+    </div>
+
+    <h3 class="category-title" id="novidades">Novidades</h3>
+    <div class="card">
+      <img src="imgs/Novidades_MaçaSemGlúten.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>38. BOLO DE MAÇA SEM GLÚTEN</h4>
+        <p>Ingredientes: Maçã, Ovos, Tâmaras, Óleo de côco, Leite Vegetal(côco), Farinha de amêndoas, Canela, Fermento, Sal e Nozes picadas.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Novidades_BananaIntegral.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>39. BOLO DE BANANA INTEGRAL </h4>
+        <p>Ingredientes: Banana nanica, Ovos, Óleo de côco, Farinha de aveia - sem glúten, Farinha de amêndoas, Mel, Canela, Fermento e Nozes picadas .</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Novidades_CenouraFit.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>40.  BOLO DE CENOURA FITNESS</h4>
+        <p>Ingredientes: Cenoura, Ovos, Leite vegetal(côco), Mel, Farinha de aveia sem glúten, Farinha de amêndoas, Fermento, Sal e Canela. - COBERTURA: Cacau em pó 100%, Leite vegetal(côco), Mel e Pasta de amendoim.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Novidades_ChocolateFit.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>41.  BOLO DE CHOCOLATE FITNESS</h4>
+        <p>Ingredientes: Ovos, Cacau em pó 100%, Farinha de aveia, Farinha de amêndoas, Mel, Leite vegetal(côco), Óleo de côco, Essência de baunilha, Fermento e Sal.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Novidades_NozesFit.jpg" alt="Preciosa">
+      <div class="card-content">
+        <h4>42.  BOLO DE NOZES FITNESS</h4>
+        <p>Ingredientes: Ovos, Mel, Óleo de côco, Leite vegetal(côco), Farinha de amêndoas, Fermento, Nozes picadas, Sal, Canela e Essência de baunilha.</p>
+      </div>
+    </div>
+
+     <h3 class="category-title" id="bebidas">Bebidas</h3>
+    <div class="card">
+      <img src="imgs/Bebidas_Laranja.jpg" alt="Suco Laranja">
+      <div class="card-content">
+        <h4>43. SUCO DE LARANJA</h4>
+        <p>Refresque seu dia com a energia da fruta!</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bebidas_Goiaba.jpg" alt="Suco Goiaba">
+      <div class="card-content">
+        <h4>44. SUCO DE GOIABA</h4>
+        <p>Sabor direto da natureza, geladinho como você merece.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bebidas_Maracuja.jpg" alt="Suco Maracujá">
+      <div class="card-content">
+        <h4>45. SUCO DE MARACUJÁ</h4>
+        <p>Feitos na hora, cheios de vitaminas e frescor.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bebidas_Abacaxi.jpg" alt="Suco Abacaxi">
+      <div class="card-content">
+        <h4>46. SUCO DE ABACAXI </h4>
+        <p>Hidrate-se com leveza e frescor.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bebidas_CaféPuro.jpg" alt="Café Puro">
+      <div class="card-content">
+        <h4>46. CAFÉ PURO </h4>
+        <p>A dose perfeita de energia para começar bem.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="imgs/Bebidas_CaféComLeite.jpg" alt="Café com Leite">
+      <div class="card-content">
+        <h4>46. CAFÉ COM LEITE</h4>
+        <p>Um abraço quentinho em forma de xícara.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer id="sobre">
+  <div class="footer-container">
+    <div class="footer-contato">
+      <h3>Contato</h3>
+      <p><i class="fas fa-envelope"></i> 
+        <a href="bemmecaketcc@gmail.com">bemmecaketcc@gmail.com</a>
+      </p>
+      <p><i class="fas fa-phone"></i> 
+        <a href="tel:+5511918768295"> (11) 91876-8295</a>
+      </p>
+    </div>
+
+    <div class="footer-redes">
+      <h3>Siga-nos</h3>
+      <p><i class="fas fa-envelope"></i> 
+        <a href="https://www.instagram.com/bem.mecake_?igsh=MjEybzd1eGJlMmNn"> https://www.instagram.com/bem.mecake</a>
+      </p>
+    </div>
+
+    <div class="footer-endereco">
+      <h3>Endereço</h3>
+      <p><i class="fas fa-envelope"></i> 
+        <a style="color: white;" href="Star Hospedaria - R. França Pinto, 873 - Vila Mariana, São Paulo - SP, 04016-033">R. França Pinto, 873 - Vila Mariana, São Paulo - SP, 04016-033</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="footer-copy">
+    <p>&copy; 2025 - Bem Me Cake. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navUl = document.querySelector('nav ul');
+
+    menuToggle.addEventListener('click', () => {
+      navUl.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>

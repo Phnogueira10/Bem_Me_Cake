@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cardápio - Doces & Bolos</title>
+  <style>
+    :root{
+      --bg:#fbfbfd; --card:#ffffff; --muted:#806b7e; --accent:#ff4da6; --accent-2:#ff4da6; --glass: rgba(255,255,255,0.6);
+      --radius:14px; --pad:1rem; --shadow: 0 6px 18px rgba(16,24,40,0.08);
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,#fbfcff 0%, #f6f8ff 100%);color:#0f172a;line-height:1.35}
+    .wrap{max-width:1180px;margin:32px auto;padding:20px}
+
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px;box-shadow:var(--shadow)}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:var(--muted)}
+
+    .controls{display:flex;gap:10px;align-items:center}
+    .search{padding:10px 12px;border-radius:10px;border:1px solid #e6e9ef;background:var(--card);min-width:220px}
+    .toggle{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid #ffffff;cursor:pointer}
+
+    main{display:grid;grid-template-columns:320px 1fr;gap:20px}
+
+    /* sidebar */
+    aside{position:sticky;top:24px;background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow);height:fit-content}
+    .category-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+    .category-list button{background:transparent;border:0;padding:8px;text-align:left;border-radius:8px;cursor:pointer}
+    .category-list button.active{background:#fff3f3}
+
+    /* content */
+    .catalog{display:flex;flex-direction:column;gap:18px}
+    section.category{background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.9));padding:14px;border-radius:12px;box-shadow:var(--shadow)}
+    section.category h2{margin:0 0 8px 0;font-size:18px}
+
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 8px 22px rgba(15,23,42,0.05);display:flex;flex-direction:column;gap:10px}
+    .card .title{font-weight:700}
+    .card .subtitle{color:var(--muted);font-size:13px}
+    .price-list{display:flex;flex-direction:column;gap:6px}
+    .price-row{display:flex;justify-content:space-between;align-items:center}
+    .qty{font-weight:600}
+    .price{font-weight:700;color:var(--accent)}
+
+    body {
+      background-image: url(imgs/WhatsApp\ Image\ 2025-10-01\ at\ 23.03.11.jpeg);
+    }
+    .btn { display:inline-block; padding:10px 20px; margin-top:10px; font-size:14px; font-weight:bold; text-decoration:none; color:#fff; background-color:#ff4da6; border-radius:8px; transition:background-color 0.3s; }
+    .btn:hover { background-color:#e60073; }
+
+    footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:900px){main{grid-template-columns:1fr}aside{order:2} .wrap{padding:12px} .logo{width:52px;height:52px}}
+    @media (max-width:520px){.cards{grid-template-columns:repeat(1,1fr)} .search{min-width:unset;width:100%}}
+
+    /* print friendly */
+    @media print{body{background:#fc9bf4} header, .controls, aside, footer{display:none} .card{box-shadow:none;border:1px solid #ddd}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo"><img src="imgs/Logo_BemMeCake.png" style="height: 50px;" alt=""></div>
+        <div>
+          <h1>Bem Me Cake — Cardápio Valores</h1>
+          <p class="lead">Veja agora preços e tamanhos dos nossos produtos. Toque para buscar ou filtrar.</p>
+        </div>
+      </div>
+      <div class="controls">
+        <input id="search" class="search" placeholder="Buscar produto, sabor ou categoria..." />
+        <a href="index.html" class="btn">⬅ Voltar</a>
+      </div>
+    </header>
+
+    <main>
+      <aside>
+        <strong>Categorias</strong>
+        <nav style="margin-top:10px">
+          <ul class="category-list" id="cats"></ul>
+        </nav>
+        <hr style="margin:12px 0;border-color:#f0f0f4">
+        <div style="font-size:13px;color:var(--muted)">Dica: use a busca para filtrar por "Brigadeiro", "Cenoura", "300ml", etc.</div>
+      </aside>
+
+      <section class="catalog" id="catalog"></section>
+    </main>
+
+    <footer>© Cardápio — Doces & Bolos • Layout responsivo | Abra em qualquer dispositivo</footer>
+  </div>
+
+  <script>
+    const data = [
+      {
+        id:'doces', title:'Doces', items:[
+          {name:'Brigadeiro', prices:[['25 unid.','R$ 44,46'],['50 unid.','R$ 77,60'],['100 unid.','R$ 139,70'],['150 unid.','R$ 207,96'],['200 unid.','R$ 270,26'],['250 unid.','R$ 338,52'],['300 unid.','R$ 400,62'],['350 unid.','R$ 469,08'],['400 unid.','R$ 531,18']]},
+          {name:'Beijinho', prices:[['25 unid.','R$ 44,46'],['50 unid.','R$ 77,60'],['100 unid.','R$ 139,70'],['150 unid.','R$ 207,96'],['200 unid.','R$ 270,26'],['250 unid.','R$ 338,52'],['300 unid.','R$ 400,62'],['350 unid.','R$ 469,08'],['400 unid.','R$ 531,18']]},
+          {name:'Bicho de pé', prices:[['25 unid.','R$ 44,46'],['50 unid.','R$ 77,60'],['100 unid.','R$ 139,70'],['150 unid.','R$ 207,96'],['200 unid.','R$ 270,26'],['250 unid.','R$ 338,52'],['300 unid.','R$ 400,62'],['350 unid.','R$ 469,08'],['400 unid.','R$ 531,18']]},
+          {name:'Ninho', prices:[['25 unid.','R$ 44,46'],['50 unid.','R$ 77,60'],['100 unid.','R$ 139,70'],['150 unid.','R$ 207,96'],['200 unid.','R$ 270,26'],['250 unid.','R$ 338,52'],['300 unid.','R$ 400,62'],['350 unid.','R$ 469,08'],['400 unid.','R$ 531,18']]},
+          {name:'Surpresa de uva', prices:[['25 unid.','R$ 59,36'],['50 unid.','R$ 107,40'],['100 unid.','R$ 167,12'],['150 unid.','R$ 232,96'],['200 unid.','R$ 292,84'],['250 unid.','R$ 358,68'],['300 unid.','R$ 418,36'],['350 unid.','R$ 484,40'],['400 unid.','R$ 544,08']]}
+        ]
+      },
+
+      {
+        id:'bolos-caseiros-sem', title:'Bolos Caseiros (sem cobertura)', items:[
+          {name:'Cenoura', prices:[['P','R$ 33,00'],['G','R$ 46,00']]},
+          {name:'Chocolate', prices:[['P','R$ 28,00'],['G','R$ 40,00']]},
+          {name:'Fubá', prices:[['P','R$ 27,00'],['G','R$ 38,00']]},
+          {name:'Laranja', prices:[['P','R$ 28,00'],['G','R$ 40,00']]},
+          {name:'Limão', prices:[['P','R$ 25,00'],['G','R$ 36,00']]},
+          {name:'Mandioca', prices:[['P','R$ 34,00'],['G','R$ 50,00']]},
+          {name:'Milho', prices:[['P','R$ 30,00'],['G','R$ 42,00']]},
+          {name:'Churros', prices:[['P','R$ 29,00'],['G','R$ 40,00']]},
+          {name:'Red velvet', prices:[['P','R$ 27,00'],['G','R$ 40,00']]},
+          {name:'Pamonha', prices:[['P','R$ 40,00'],['G','R$ 60,00']]},
+          {name:'Banana c/ aveia', prices:[['P','R$ 30,00'],['G','R$ 44,00']]},
+          {name:'Banana caramelizada', prices:[['P','R$ 30,00'],['G','R$ 44,00']]},
+          {name:'Formigueiro', prices:[['P','R$ 28,00'],['G','R$ 40,00']]},
+          {name:'Ninho', prices:[['P','R$ 32,00'],['G','R$ 46,00']]},
+          {name:'Côco', prices:[['P','R$ 32,00'],['G','R$ 48,00']]},
+          {name:'Chocolate vegano', prices:[['P','R$ 30,00'],['G','R$ 44,00']]},
+          {name:'Cenoura vegano', prices:[['P','R$ 29,00'],['G','R$ 42,00']]},
+          {name:'Chocolate s/ lactose/gluten', prices:[['P','R$ 29,00'],['G','R$ 40,00']]},
+          {name:'Cenoura s/ lactose/ gluten', prices:[['P','R$ 31,00'],['G','R$ 44,00']]}
+        ]
+      },
+
+      {
+        id:'bolos-cobertura', title:'Bolos (com cobertura)', items:[
+          {name:'Cenoura', prices:[['P','R$ 38,00'],['G','R$ 56,00']]},
+          {name:'Chocolate', prices:[['P','R$ 31,00'],['G','R$ 50,00']]},
+          {name:'Churros', prices:[['P','R$ 32,00'],['G','R$ 50,00']]},
+          {name:'Red velvet', prices:[['P','R$ 30,00'],['G','R$ 48,00']]},
+          {name:'Limão', prices:[['P','R$ 28,00'],['G','R$ 46,00']]},
+          {name:'Formigueiro', prices:[['P','R$ 31,00'],['G','R$ 50,00']]},
+          {name:'Ninho', prices:[['P','R$ 35,00'],['G','R$ 56,00']]},
+          {name:'Chocolate vegano', prices:[['P','R$ 40,00'],['G','R$ 58,00']]},
+          {name:'Cenoura vegano', prices:[['P','R$ 39,00'],['G','R$ 60,00']]},
+          {name:'Chocolate s/ lactose/gluten', prices:[['P','R$ 39,00'],['G','R$ 54,00']]},
+          {name:'Cenoura s/ lactose/ gluten', prices:[['P','R$ 41,00'],['G','R$ 60,00']]}
+        ]
+      },
+
+      { id:'bolos-pote', title:'Bolos de Pote', items:[
+        {name:'Cenoura','prices':[ ['1 un.','R$ 12,00']]},
+        {name:'Chocolatudo','prices':[ ['1 un.','R$ 15,00']]},
+        {name:'Prestígio','prices':[ ['1 un.','R$ 11,00']]},
+        {name:'Red Velvet','prices':[ ['1 un.','R$ 14,00']]},
+        {name:'Ninho com morango','prices':[ ['1 un.','R$ 16,00']]}]
+      },
+
+      { id:'bebidas', title:'Bebidas — Sucos', items:[
+        {name:'Sucos 300ml ', prices:[['Laranja','R$ 12,50'],['Goiaba','R$ 10,00'],['Maracujá','R$ 12,50'],['Abacaxi','R$ 10,50']]},
+        {name:'Sucos 400ml ', prices:[['Laranja','R$ 13,00'],['Goiaba','R$ 10,00'],['Maracujá','R$ 11,00'],['Abacaxi','R$ 11,00']]},
+        {name:'Sucos 500ml ', prices:[['Laranja','R$ 15,00'],['Goiaba','R$ 12,00'],['Maracujá','R$ 16,50'],['Abacaxi','R$ 14,00']]}]
+      },
+
+      { id:'cafes', title:'Cafés', items:[
+        {name:'Cafés', prices:[['Café puro 100ml','R$ 3,50'],['Café com leite 100ml','R$ 4,00'],['Café puro 150ml','R$ 3,00'],['Café com leite 150ml','R$ 4,50']]}]
+      }
+    ];
+
+    const catalogEl = document.getElementById('catalog');
+    const catsEl = document.getElementById('cats');
+    const searchEl = document.getElementById('search');
+
+    function renderCategories(){
+      catsEl.innerHTML = '';
+      data.forEach((c, i)=>{
+        const btn = document.createElement('button');
+        btn.textContent = c.title;
+        btn.onclick = ()=>{document.getElementById(c.id).scrollIntoView({behavior:'smooth'}); setActive(i)};
+        if(i===0) btn.classList.add('active');
+        catsEl.appendChild(btn);
+      });
+    }
+
+    function setActive(idx){
+      Array.from(catsEl.children).forEach((b,i)=>{b.classList.toggle('active', i===idx)})
+    }
+
+    function renderCatalog(filterText=''){
+      catalogEl.innerHTML = '';
+      const q = filterText.trim().toLowerCase();
+      data.forEach(section=>{
+        const sec = document.createElement('section'); sec.className='category'; sec.id = section.id;
+        const title = document.createElement('h2'); title.textContent = section.title; sec.appendChild(title);
+        const cards = document.createElement('div'); cards.className='cards';
+
+        section.items.forEach(item=>{
+          const itemText = (item.name + ' ' + (item.prices||'').map(p=>p.join(' '))).toLowerCase();
+          if(q && !itemText.includes(q)) return;
+          const card = document.createElement('div'); card.className='card';
+          const top = document.createElement('div');
+          top.innerHTML = `<div class="title">${item.name}</div><div class="subtitle">${section.title}</div>`;
+
+          const list = document.createElement('div'); list.className='price-list';
+          item.prices.forEach(p=>{
+            const row = document.createElement('div'); row.className='price-row';
+            const qty = document.createElement('div'); qty.className='qty'; qty.textContent = p[0];
+            const pr = document.createElement('div'); pr.className='price'; pr.textContent = p[1];
+            row.appendChild(qty); row.appendChild(pr); list.appendChild(row);
+          })
+
+          card.appendChild(top); card.appendChild(list);
+          cards.appendChild(card);
+        })
+
+        sec.appendChild(cards);
+        catalogEl.appendChild(sec);
+      })
+    }
+
+    renderCategories(); renderCatalog();
+
+    searchEl.addEventListener('input', e=> renderCatalog(e.target.value));
+
+    document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+  </script>
+</body>
+</html>
